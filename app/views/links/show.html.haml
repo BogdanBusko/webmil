@@ -5,7 +5,8 @@
   = @link.url
 %p
   %b Tags:
-  = @link.tags
+  - @link.tags.each do |tag|
+    = link_to "##{tag}", links_by_tag_path(tag)
 %p
   %b Description:
   = @link.description

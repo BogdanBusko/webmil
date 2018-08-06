@@ -1,19 +1,15 @@
 class Link
   include Mongoid::Document
 
+  belongs_to :user
+
   field :url, type: String
-  field :tags, type: String
+  field :tags, type: Array
   field :description, type: String
 
   validates :url, presence: true
 
-  before_save :format_tag
-
-  def format_tag
-    self.tags = self.tags.downcase.gsub!(/[.,#]/, ' ')
-  end
-
-  def get_tag
-    self.tags.split(' ')
+  def format_tag(tags)
+    self.tags = tags.split(/[,.]/).map{ |tag| tag.lstrip.rstrip }
   end
 end

@@ -1,11 +1,11 @@
 class LinksController < ApplicationController
-  before_action :set_link, only: [:show, :edit, :update, :destroy]
   before_action :authenticate_user!
+  before_action :set_link, only: [:show, :edit, :update, :destroy]
 
 
   # GET /links
   def index
-    @links = Link.all
+    @links = Link.where(user_id: current_user.id)
   end
 
   # GET /links/1
@@ -25,6 +25,8 @@ class LinksController < ApplicationController
   def create
     @link = Link.new(link_params)
 
+    @link.format_tag(params[:link][:tags])
+
     if @link.save
       redirect_to root_url, notice: 'Link was successfully created.'
     else
@@ -34,8 +36,11 @@ class LinksController < ApplicationController
 
   # PATCH/PUT /links/1
   def update
+    @link.format_tag(params[:link][:tags])
+
+
     if @link.update(link_params)
-      redirect_to @link, notice: 'Link was successfully updated.'
+      redirect_to root_url, notice: 'Link was successfully updated.'
     else
       render :edit
     end
@@ -50,7 +55,7 @@ class LinksController < ApplicationController
 
   # GET /links/sport
   def by_tag
-    @links = Link.where(tags: /.*#{params[:tag]}.*/i)
+    @links = Link.where(tags: params[:tag], user_id: current_user.id)
   end
 
   private
@@ -62,6 +67,6 @@ class LinksController < ApplicationController
 
   # Never trust parameters from the scary internet, only allow the white list through.
   def link_params
-    params.require(:link).permit(:url, :tags, :description)
+    params.require(:link).permit(:url, :description).merge(user_id: current_user.id)
   end
 end
