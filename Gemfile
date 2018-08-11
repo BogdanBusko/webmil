@@ -8,6 +8,8 @@ gem 'haml-rails'
 gem 'devise'
 gem 'rails_admin'
 gem 'cancan'
+gem 'simple_enum', require: 'simple_enum/mongoid'
+gem 'kaminari-mongoid'
 
 gem 'rails', '~> 5.2.0'
 gem 'puma', '~> 3.11'

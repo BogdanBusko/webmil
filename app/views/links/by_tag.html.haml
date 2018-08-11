@@ -16,8 +16,8 @@
       %tr
         %td= link.url
         %td
-          - link.tags.each do |tag|
-            = link_to "##{tag}", links_by_tag_path(tag)
+          - link.tags.split(',').each do |tag|
+            = link_to "##{tag.strip}", links_by_tag_path(tag)
         %td= link.description
         %td= link_to 'Show', link
         %td= link_to 'Edit', edit_link_path(link)

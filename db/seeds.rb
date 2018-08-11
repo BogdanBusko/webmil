@@ -1,26 +1,19 @@
-user1 = User.create!(email: 'busko.bogdan@gmail.com', password: '123456')
-user2 = User.create!(email: 'example@gmail.com', password: '123456')
+User.create!(email: 'busko.bogdan@gmail.com', password: '123456', role: :admin)
+User.create!(email: 'example@gmail.com', password: '123456', role: :user)
 
-10.times do
-  link = Link.new(
-    url: Faker::Internet.domain_name,
-    description: Faker::Lorem.paragraph,
-    user_id: user1.id
-  )
+User.each do |user|
+  10.times do
+    link = Link.new(
+      url: Faker::Internet.domain_name,
+      description: Faker::Lorem.paragraph,
+      user_id: user.id
+    )
 
-  link.format_tag(Faker::Internet.domain_name)
+    link.tags = ''
+    Faker::Number.between(1, 10).times do
+      link.tags += Faker::Lorem.word + ' '
+    end
 
-  link.save!
-end
-
-10.times do
-  link = Link.new(
-    url: Faker::Internet.domain_name,
-    description: Faker::Lorem.paragraph,
-    user_id: user2.id
-  )
-
-  link.format_tag(Faker::Internet.domain_name)
-
-  link.save!
+    link.save
+  end
 end

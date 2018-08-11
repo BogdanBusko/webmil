@@ -25,8 +25,6 @@ class LinksController < ApplicationController
   def create
     @link = Link.new(link_params)
 
-    @link.format_tag(params[:link][:tags])
-
     if @link.save
       redirect_to root_url, notice: 'Link was successfully created.'
     else
@@ -36,9 +34,6 @@ class LinksController < ApplicationController
 
   # PATCH/PUT /links/1
   def update
-    @link.format_tag(params[:link][:tags])
-
-
     if @link.update(link_params)
       redirect_to root_url, notice: 'Link was successfully updated.'
     else
@@ -55,7 +50,7 @@ class LinksController < ApplicationController
 
   # GET /links/sport
   def by_tag
-    @links = Link.where(tags: params[:tag], user_id: current_user.id)
+    @links = Link.where(tags: /(#{params[:tag].lstrip})/, user_id: current_user.id)
   end
 
   private
@@ -67,6 +62,6 @@ class LinksController < ApplicationController
 
   # Never trust parameters from the scary internet, only allow the white list through.
   def link_params
-    params.require(:link).permit(:url, :description).merge(user_id: current_user.id)
+    params.require(:link).permit(:url, :tags, :description).merge(user_id: current_user.id)
   end
 end

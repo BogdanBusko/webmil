@@ -1,6 +1,7 @@
 class User
   include Mongoid::Document
-
+  include SimpleEnum::Mongoid
+  
   has_many :links
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
@@ -10,6 +11,7 @@ class User
   ## Database authenticatable
   field :email,              type: String, default: ""
   field :encrypted_password, type: String, default: ""
+  as_enum :role, admin: 'Admin', user: 'User'
 
   ## Recoverable
   field :reset_password_token,   type: String
@@ -24,6 +26,7 @@ class User
   field :last_sign_in_at,    type: Time
   field :current_sign_in_ip, type: String
   field :last_sign_in_ip,    type: String
+
 
   ## Confirmable
   # field :confirmation_token,   type: String
